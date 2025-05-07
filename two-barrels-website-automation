@@ -1,0 +1,175 @@
+describe('Two Barrels Mobile and Desktop Smoke Test', () => {
+    Cypress.config('defaultCommandTimeout', 5000)
+    Cypress.config('retries', 0)
+
+    it.skip('Mobile View', () => {
+        cy.viewport(390, 844)
+        cy.visit('https://www.twobarrels.com')
+
+        // Verify 2 Barrels Logo in header
+        cy.get('header.header')
+            .find('.logo a')
+            .should('be.visible')
+            .and('have.attr', 'href', 'https://www.twobarrels.com')
+
+        // Verify Home Page image is visible and contains text
+        cy.get('.home-image-container h1')
+            .should('be.visible')
+            .and('have.text', "We Give'Em Two Barrels - Every Day")
+
+        // Verify Mobile Menu options are visible
+        cy.get('.mobile-nav-trigger').contains('Menu').click()
+        cy.get('nav.show-mobile-nav').within(() => {
+            cy.contains('a', 'Overview').should('be.visible')
+            cy.contains('a', 'Who We Are').should('be.visible')
+            cy.contains('a', 'Jobs').should('be.visible')
+            cy.contains('a', 'Contact Us').should('be.visible')
+            cy.contains('a', 'Blog').should('be.visible')
+        })
+
+        // Verify Who We Are page
+        cy.contains('a', 'Who We Are').click()
+        cy.url().should('include', '/who-we-are')
+        cy.contains('h1', 'Who We Are').should('be.visible')
+
+        // Verify Diversity, Equity, and Inclusion page
+        cy.get('.mobile-nav-trigger').contains('Menu').click()
+        cy.get('ul.sub-menu')
+            .contains('a', 'Diversity, Equity, and Inclusion')
+            .should('be.visible')
+            .click()
+        cy.url().should('include', '/who-we-are/diversity-equity-and-inclusion')
+        cy.get('h1.nice-little-h1')
+            .should('be.visible')
+            .and('have.text', 'Diversity, Equity, and Inclusion')
+
+        // Verify Jobs Page
+        cy.get('.mobile-nav-trigger').contains('Menu').click()
+        cy.contains('a', 'Jobs').click()
+        cy.url().should('include', '/jobs')
+        cy.contains('h1', 'Jobs').should('be.visible')
+
+        // Verify Jobs Sub Page
+        // How We Work
+        cy.get('.mobile-nav-trigger').contains('Menu').click()
+        cy.get('ul.sub-menu')
+            .contains('a', 'How We Work')
+            .should('be.visible')
+            .click()
+        cy.url().should('include', '/jobs/how-we-work')
+        cy.get('h1.nice-little-h1')
+            .should('be.visible')
+            .and('have.text', 'How We Work')
+
+        // Verify Blog Page
+        cy.get('.mobile-nav-trigger').contains('Menu').click()
+        cy.contains('a', 'Blog').click()
+        cy.url().should('include', '/blog')
+        cy.get('h1.nice-little-h1')
+            .should('be.visible')
+            .and('have.text', 'Latest Posts')
+
+        // Verify Contact Us Page
+        cy.get('.mobile-nav-trigger').contains('Menu').click()
+        cy.contains('a', 'Contact Us').click()
+        cy.url().should('include', '/contact-us')
+        cy.get('input[name="contactInformation.firstName"]').type('Jake')
+        cy.get('input[name="contactInformation.lastName"]').type('Barrett')
+        cy.get('input[name="accountInformation.email"]').type(
+            'jbarrett92@gmail.com'
+        )
+        cy.get('#contactMessage').type(
+            'Hey Two Barrels! You seem like an awesome team! Hire me for more automated tests like this one! 😁',
+            {
+                delay: 75,
+            }
+        )
+        cy.wait(2000)
+
+        // Verify Raptor is visible at bottom of the page
+        cy.get('footer.footer')
+            .should('have.css', 'background-image')
+            .and('include', 'raptor.png')
+    })
+
+    it('Desktop View', () => {
+        cy.viewport(1440, 900)
+        cy.visit('https://www.twobarrels.com')
+
+        // Verify 2 Barrels Logo in header
+        cy.get('header.header')
+            .find('.logo a')
+            .should('be.visible')
+            .and('have.attr', 'href', 'https://www.twobarrels.com')
+
+        // Verify Home Page image is visible and contains text
+        cy.get('.home-image-container h1')
+            .should('be.visible')
+            .and('have.text', "We Give'Em Two Barrels - Every Day")
+
+        // Verify Side Nav Options
+        // Over View Page
+        cy.get('nav.nav')
+            .contains('a', 'Who We Are')
+            .should('be.visible')
+            .click()
+        cy.url().should('include', '/who-we-are')
+        cy.contains('h1', 'Who We Are').should('be.visible')
+
+        // Verify Diversity, Equity, and Inclusion page
+        cy.get('nav.nav')
+            .contains('a', 'Diversity, Equity, and Inclusion')
+            .click()
+        cy.url().should('include', '/who-we-are/diversity-equity-and-inclusion')
+        cy.get('h1.nice-little-h1')
+            .should('be.visible')
+            .and('have.text', 'Diversity, Equity, and Inclusion')
+
+        // Verify Jobs Page
+        cy.get('nav.nav').contains('a', 'Jobs').should('be.visible').click()
+        cy.url().should('include', '/jobs')
+        cy.contains('h1', 'Jobs').should('be.visible')
+
+        // Verify Jobs Sub Page
+        // How We Work
+        cy.get('nav.nav')
+            .contains('a', 'How We Work')
+            .should('be.visible')
+            .click()
+        cy.url().should('include', '/jobs/how-we-work')
+        cy.get('h1.nice-little-h1')
+            .should('be.visible')
+            .and('have.text', 'How We Work')
+
+        // Verify Blog Page
+        cy.get('nav.nav')
+        cy.contains('a', 'Blog').click()
+        cy.url().should('include', '/blog')
+        cy.get('h1.nice-little-h1')
+            .should('be.visible')
+            .and('have.text', 'Latest Posts')
+
+        // Verify Contact Us Page
+        cy.get('nav.nav')
+        cy.contains('a', 'Contact Us').click()
+        cy.url().should('include', '/contact-us')
+        cy.get('input[name="contactInformation.firstName"]').type('Jake')
+        cy.get('input[name="contactInformation.lastName"]').type('Barrett')
+        cy.get('input[name="accountInformation.email"]').type(
+            'jbarrett92@gmail.com'
+        )
+        cy.get('#contactMessage').type(
+            'Hey Two Barrels! You seem like an awesome team! Hire me for more automated tests like this one! 😁',
+            {
+                delay: 75,
+            }
+        )
+        cy.wait(2000)
+
+        // Verify Raptor is visible at bottom of the page
+        cy.get('footer.footer')
+            .should('have.css', 'background-image')
+            .and('include', 'raptor.png')
+            
+    })
+})
