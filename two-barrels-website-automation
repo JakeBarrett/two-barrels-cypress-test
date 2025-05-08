@@ -2,7 +2,7 @@ describe('Two Barrels Mobile and Desktop Smoke Test', () => {
     Cypress.config('defaultCommandTimeout', 5000)
     Cypress.config('retries', 0)
 
-    it.skip('Mobile View', () => {
+    it('Mobile View', () => {
         cy.viewport(390, 844)
         cy.visit('https://www.twobarrels.com')
 
